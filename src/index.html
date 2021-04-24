@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Hello Electron React!</title>
+    <script>
+      (() => {
+        if (process?.env?.NODE_ENV !== 'development') {
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = './dist/style.css';
+          // HACK: Writing the script path should be done with webpack
+          document.getElementsByTagName('head')[0].appendChild(link);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <header id="topbar">
+      <div id="drag-region">
+        <div id="window-controls">
+          <div class="button" id="min-button">
+            <img
+              class="icon"
+              srcset="
+                ../assets/icons/min-w-10.png 1x,
+                ../assets/icons/min-w-12.png 1.25x,
+                ../assets/icons/min-w-15.png 1.5x,
+                ../assets/icons/min-w-15.png 1.75x,
+                ../assets/icons/min-w-20.png 2x,
+                ../assets/icons/min-w-20.png 2.25x,
+                ../assets/icons/min-w-24.png 2.5x,
+                ../assets/icons/min-w-30.png 3x,
+                ../assets/icons/min-w-30.png 3.5x
+              "
+              draggable="false"
+            />
+          </div>
+
+          <div class="button" id="max-button">
+            <img
+              class="icon"
+              srcset="
+                ../assets/icons/max-w-10.png 1x,
+                ../assets/icons/max-w-12.png 1.25x,
+                ../assets/icons/max-w-15.png 1.5x,
+                ../assets/icons/max-w-15.png 1.75x,
+                ../assets/icons/max-w-20.png 2x,
+                ../assets/icons/max-w-20.png 2.25x,
+                ../assets/icons/max-w-24.png 2.5x,
+                ../assets/icons/max-w-30.png 3x,
+                ../assets/icons/max-w-30.png 3.5x
+              "
+              draggable="false"
+            />
+          </div>
+
+          <div class="button" id="restore-button">
+            <img
+              class="icon"
+              srcset="
+                ../assets/icons/restore-w-10.png 1x,
+                ../assets/icons/restore-w-12.png 1.25x,
+                ../assets/icons/restore-w-15.png 1.5x,
+                ../assets/icons/restore-w-15.png 1.75x,
+                ../assets/icons/restore-w-20.png 2x,
+                ../assets/icons/restore-w-20.png 2.25x,
+                ../assets/icons/restore-w-24.png 2.5x,
+                ../assets/icons/restore-w-30.png 3x,
+                ../assets/icons/restore-w-30.png 3.5x
+              "
+              draggable="false"
+            />
+          </div>
+
+          <div class="button" id="close-button">
+            <img
+              class="icon"
+              srcset="
+                ../assets/icons/close-w-10.png 1x,
+                ../assets/icons/close-w-12.png 1.25x,
+                ../assets/icons/close-w-15.png 1.5x,
+                ../assets/icons/close-w-15.png 1.75x,
+                ../assets/icons/close-w-20.png 2x,
+                ../assets/icons/close-w-20.png 2.25x,
+                ../assets/icons/close-w-24.png 2.5x,
+                ../assets/icons/close-w-30.png 3x,
+                ../assets/icons/close-w-30.png 3.5x
+              "
+              draggable="false"
+            />
+          </div>
+        </div>
+        <div id="window-title">
+          <span>ReactTrons</span>
+        </div>
+      </div>
+    </header>
+
+    <div id="root"></div>
+
+    <script>
+      const scripts = [];
+
+      if (process.env.NODE_ENV === 'development') {
+        // Dynamically insert the DLL script in development env in the
+        // renderer process
+        scripts.push('../.erb/dll/renderer.dev.dll.js');
+
+        // Dynamically insert the bundled app script in the renderer process
+        const port = process.env.PORT || 1212;
+        scripts.push(`http://localhost:${port}/dist/renderer.dev.js`);
+      } else {
+        scripts.push('./dist/renderer.prod.js');
+      }
+
+      if (scripts.length) {
+        document.write(
+          scripts
+            .map((script) => `<script defer src="${script}"><\/script>`)
+            .join('')
+        );
+      }
+    </script>
+    <script src="../assets/window-controls.js"></script>
+  </body>
+</html>
